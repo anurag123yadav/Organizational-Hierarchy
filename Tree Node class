@@ -1,0 +1,53 @@
+public class TreeNode {
+    private int id;
+    private int level;
+    private TreeNode boss;
+    private List<TreeNode> subordinates;
+
+    public TreeNode(int id, int level, TreeNode boss) {
+        this.id = id;
+        this.level = level;
+        this.boss = boss;
+        this.subordinates = new ArrayList<>();
+    }
+
+    // Implement methods to add, remove, find employees and their common boss.
+
+    public int getId() {
+        return id;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public TreeNode getParent() {
+        return boss;
+    }
+
+    public boolean isLeaf() {
+        return subordinates.isEmpty();
+    }
+
+    public void addChild(TreeNode child) {
+        subordinates.add(child);
+    }
+
+    public void removeChild(TreeNode child) {
+        subordinates.remove(child);
+    }
+
+    public int getSize() {
+        int size = 1;
+        for (TreeNode subordinate : subordinates) {
+            size += subordinate.getSize();
+        }
+        return size;
+    }
+
+    public static TreeNode findLowestCommonBoss(TreeNode employee1, TreeNode employee2) {
+        // Implement the logic to find the lowest common boss of two employees.
+    }
+
+    // Implement the toString() method to represent the hierarchy as a string.
+}
