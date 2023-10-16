@@ -1,0 +1,108 @@
+public class OrgHierarchy {
+    private TreeNode owner; // Root of the hierarchy
+
+    public OrgHierarchy() {
+        owner = null;
+    }
+
+    public boolean isEmpty() {
+        return owner == null;
+    }
+
+    public int size() {
+        if (owner == null) return 0;
+        return owner.getSize();
+    }
+
+    public int level(int id) throws IllegalIDException {
+        if (owner == null) {
+            throw new IllegalIDException();
+        }
+        TreeNode employee = owner.findEmployee(id);
+        if (employee == null) {
+            throw new IllegalIDException();
+        }
+        return employee.getLevel();
+    }
+
+    public void hireOwner(int id) throws NotEmptyException {
+        if (owner != null) {
+            throw new NotEmptyException();
+        }
+        owner = new TreeNode(id, 1, null);
+    }
+
+    public void hireEmployee(int id, int bossid) throws IllegalIDException {
+        if (owner == null) {
+            throw new IllegalIDException();
+        }
+        TreeNode boss = owner.findEmployee(bossid);
+        if (boss == null) {
+            throw new IllegalIDException();
+        }
+        boss.addChild(new TreeNode(id, boss.getLevel() + 1, boss));
+    }
+
+    public void fireEmployee(int id) throws IllegalIDException {
+        if (owner == null) {
+            throw new IllegalIDException();
+        }
+        TreeNode employee = owner.findEmployee(id);
+        if (employee == null) {
+            throw new IllegalIDException();
+        }
+        if (employee.isLeaf()) {
+            TreeNode parent = employee.getParent();
+            parent.removeChild(employee);
+        } else {
+            // Handle case where the employee manages others
+            // You need to reassign their subordinates to a new boss
+        }
+    }
+
+    public void fireEmployee(int id, int manageid) throws IllegalIDException {
+        // Similar to fireEmployee(id) but reassign the subordinates to manageid
+    }
+
+    public int boss(int id) throws IllegalIDException {
+        if (owner == null) {
+            throw new IllegalIDException();
+        }
+        TreeNode employee = owner.findEmployee(id);
+        if (employee == null) {
+            throw new IllegalIDException();
+        }
+        TreeNode boss = employee.getParent();
+        if (boss == null) {
+            return -1; // The owner has no boss
+        }
+        return boss.getId();
+    }
+
+    public int lowestCommonBoss(int id1, int id2) throws IllegalIDException {
+        if (owner == null) {
+            throw new IllegalIDException();
+        }
+        TreeNode employee1 = owner.findEmployee(id1);
+        TreeNode employee2 = owner.findEmployee(id2);
+        if (employee1 == null || employee2 == null) {
+            throw new IllegalIDException();
+        }
+        TreeNode commonBoss = TreeNode.findLowestCommonBoss(employee1, employee2);
+        if (commonBoss == null) {
+            return -1; // No common boss
+        }
+        return commonBoss.getId();
+    }
+
+    public String toString(int id) throws IllegalIDException {
+        if (owner == null) {
+            throw new IllegalIDException();
+        }
+        TreeNode employee = owner.findEmployee(id);
+        if (employee == null) {
+            throw new IllegalIDException();
+        }
+        return employee.toString();
+    }
+}
